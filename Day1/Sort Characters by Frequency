@@ -1,0 +1,48 @@
+Given a string s, sort it in decreasing order based on the frequency of the characters. The frequency of a character is the number of times it appears in the string.
+Return the sorted string. If there are multiple answers, return any of them.
+
+Example 1:
+Input: s = "tree"
+Output: "eert"
+Explanation: 'e' appears twice while 'r' and 't' both appear once.
+So 'e' must appear before both 'r' and 't'. Therefore "eetr" is also a valid answer.
+
+Example 2:
+Input: s = "cccaaa"
+Output: "aaaccc"
+Explanation: Both 'c' and 'a' appear three times, so both "cccaaa" and "aaaccc" are valid answers.
+Note that "cacaca" is incorrect, as the same characters must be together.
+
+Example 3:
+Input: s = "Aabb"
+Output: "bbAa"
+Explanation: "bbaA" is also a valid answer, but "Aabb" is incorrect.
+Note that 'A' and 'a' are treated as two different characters.
+ 
+Constraints:
+1 <= s.length <= 5 * 105
+s consists of uppercase and lowercase English letters and digits.
+--------------------------------------------------------------------------
+class Solution {
+public:
+    string frequencySort(string s) {
+        unordered_map<char,int> mp;
+        priority_queue<pair<int,char>> maxheap;//each element of max heap will be a pair. the first element will be the freq and second will be the character
+        int maxim = INT_MIN;
+        char max_el;
+        string ans = "";
+        //step1: make a freq map:
+        for(int i = 0;i<s.length();i++){
+            mp[s[i]]++;//keeping track of the frequencies of each character
+        }
+        //step2: make a max heap which will be sorted acc to the frequency. So we keep frequency as the first element in the pair
+        for(auto it:mp){
+            maxheap.push({it.second,it.first});//we push a pair (freq,character)
+        }//the root pair of maxheap will be the have the maximum frequency and the corresponding character
+        while(!maxheap.empty()){
+            ans+=string(maxheap.top().first,maxheap.top().second);//concatenate the character present at heap top as many times as is its frequency
+            maxheap.pop();
+        }
+        return ans;
+    }
+};
