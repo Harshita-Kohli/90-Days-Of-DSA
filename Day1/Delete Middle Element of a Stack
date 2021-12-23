@@ -1,0 +1,67 @@
+Given a stack with push(), pop(), empty() operations, delete the middle of the stack without using any additional data structure.
+Middle: ceil(size_of_stack/2.0)
+https://practice.geeksforgeeks.org/problems/delete-middle-element-of-a-stack/1
+Example 1:
+Input: 
+Stack = {1, 2, 3, 4, 5}
+Output:
+ModifiedStack = {1, 2, 4, 5}
+Explanation:
+As the number of elements is 5 , 
+hence the middle element will be the 3rd
+element which is deleted
+
+Example 2:
+Input: 
+Stack = {1 2 3 4}
+Output:
+ModifiedStack = {1 3 4}
+Explanation:
+As the number of elements is 4 , 
+hence the middle element will be the 2nd
+element which is deleted
+ 
+Your Task:
+You don't need to read input or print anything. Complete the function deleteMid() which takes the stack and its size as input parameters and modifies the stack in-place.
+Note: The output shows the stack from top to bottom.
+
+
+Expected Time Complexity: O(N)
+Expected Auxiliary Space: O(N)
+
+
+Constraints:
+2 ≤ size of stack ≤ 100
+---------------------------------------------------------------------------------------------------------
+class Solution
+{
+    public:
+     int pos = 0;
+     void helper(stack<int>&s,int n,int pos)
+     {
+         //we can do this inplace using recursion:
+        //base case:
+        if(pos==n || n==0)//if we have traversed all items or stack given is empty, return
+        {
+            return;
+        }
+        //pop the top of the stack and increment the count
+        int temp = s.top();
+        s.pop();
+        //recursive call with incremented count
+        helper(s,n,pos+1);
+        
+        //after all recursive calls push all the temps back into the stack except
+        //for the middle element:
+        if(pos!= ceil(n/2))
+        {
+            s.push(temp);
+        }
+     }
+    //Function to delete middle element of a stack.
+    void deleteMid(stack<int>&s, int sizeOfStack)
+    {
+        // code here.. 
+        helper(s,sizeOfStack,0);
+    }
+};
