@@ -1,0 +1,84 @@
+Given the head of a singly linked list and two integers left and right where left <= right, reverse the nodes of the list from position left to position right, and return the reversed list.
+
+ 
+
+Example 1:
+
+
+Input: head = [1,2,3,4,5], left = 2, right = 4
+Output: [1,4,3,2,5]
+Example 2:
+
+Input: head = [5], left = 1, right = 1
+Output: [5]
+ 
+
+Constraints:
+
+The number of nodes in the list is n.
+1 <= n <= 500
+-500 <= Node.val <= 500
+1 <= left <= right <= n
+ 
+
+Follow up: Could you do it in one pass?
+-----------------------------------------------------------------------
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseBetween(ListNode* head, int left, int right) {
+        if(left==right)
+        {
+            return head;//because we can't reverse a single node
+        }
+        if(head==NULL){
+            return NULL;//empty linked list
+        }
+        ListNode* start = NULL;
+        ListNode* curr = head;
+        ListNode* prev = NULL;
+        ListNode* n;
+        ListNode* tail;
+       //First, iterate over the linked list and point prev and curr to the correct nodes in ll:
+       while(left>1){//we move the pointers till they reach the correct position
+            prev = curr;//prev will finally point to the point where reversed ll is to be attached
+            curr = curr->next;//curr will point to the leftmost node(of the part to be reversed)
+           left--;
+           right--;//right is reduced relatively as left
+           }
+        
+        start = prev;//start of the list where the reversed list is to be attached 
+        tail =curr;//curr will be the new tail of the reversed list
+        
+        while(right>0){//we keep reversing the linked list untill right becomes 0
+            n = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = n;
+            right--;
+        }
+        //after this while loop, prev will become the new head of the reversed list
+        //curr will be pointing to the next of right node, where the new tail is to be connected
+        
+        //after reversing the list, we attach it to start and end node:
+        if(start!=NULL){
+            start->next = prev;//we attach teh new head to the start point
+        }
+        else
+        {
+            head = prev;//if start point is NULL, it means we had to reverse the list starting from head itself(ie,left was 0),then the new head of the entire list will be prev
+        }
+        
+        tail->next = curr;
+        return head;
+    }
+};
