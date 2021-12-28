@@ -1,0 +1,59 @@
+Given the root of a binary tree, calculate the vertical order traversal of the binary tree.
+
+For each node at position (row, col), its left and right children will be at positions (row + 1, col - 1) and (row + 1, col + 1) respectively. The root of the tree is at (0, 0).
+
+The vertical order traversal of a binary tree is a list of top-to-bottom orderings for each column index starting from the leftmost column and ending on the rightmost column. There may be multiple nodes in the same row and same column. In such a case, sort these nodes by their values.
+
+Return the vertical order traversal of the binary tree.
+
+Constraints:
+
+The number of nodes in the tree is in the range [1, 1000].
+0 <= Node.val <= 1000
+-----------------------------------------------------
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    vector<vector<int>> verticalTraversal(TreeNode* root) {
+        vector<vector<int>> ans;
+        map<int,vector<int>>mp;//key = horizontal distance from root, value = vector having all the node values which are at that hz distance from root
+        queue<pair<TreeNode*,int>>q;
+        q.push({root,0});//root is at hz distance = 0 from root
+        while(!q.empty()){
+            vector<pair<int,int>>temp;//maintain a vector of pair for each level, where first member is node's value and 2nd member is the hz distance of that node
+            int size = q.size();
+                while(size>0)//keep doing the following for all the nodes at the same horizontal level
+                {
+                    TreeNode* curr = q.front().first;
+                    int currdist = q.front().second;//the hz distance of current node from the root
+                    q.pop();
+                    temp.push_back({curr->val,currdist});//we keep pushing all the pairs of node values and their hz distance for all those nodes that are at the same horizontal level 
+                    if(curr->left){ //push left child and its hz distance from root into queue
+                        q.push({curr->left,currdist-1});
+                    }
+                    if(curr->right){ //push right child and its hz distance from root into queue
+                        q.push({curr->right,currdist+1});
+                    }
+                    size--;
+                }
+            sort(temp.begin(),temp.end());//sorting tkaes place for the same level nodes on the basis of first member of pair ie curr->val
+            for(auto int i = 0;i<temp.size();i++){
+                mp[temp[i].second].push_back(temp[i].first);//we iterate over the sorted temp[] and push all the node values into mp[currdist] 
+            }
+        }
+        for(auto it:mp){
+            ans.push_back(it.second);//we push all the vectors stored in the map into the 2d array ans
+        }
+        return ans;
+    }
+};
