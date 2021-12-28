@@ -1,0 +1,75 @@
+Given below is a binary tree. The task is to print the top view of binary tree. Top view of a binary tree is the set of nodes visible when the tree is viewed from the top. For the given below tree
+
+       1
+    /     \
+   2       3
+  /  \    /   \
+4    5  6   7
+
+Top view will be: 4 2 1 3 7
+Note: Return nodes from leftmost node to rightmost node.
+
+Example 1:
+
+Input:
+      1
+   /    \
+  2      3
+Output: 2 1 3
+Example 2:
+
+Input:
+       10
+    /      \
+  20        30
+ /   \    /    \
+40   60  90    100
+Output: 40 20 10 30 100
+Your Task:
+Since this is a function problem. You don't have to take input. Just complete the function topView() that takes root node as parameter and returns a list of nodes visible from the top view from left to right.
+
+Expected Time Complexity: O(N)
+Expected Auxiliary Space: O(N).
+
+Constraints:
+1 ≤ N ≤ 105
+1 ≤ Node Data ≤ 105
+------------------------------------------------------------------------------------------
+class Solution
+{
+    public:
+    //Function to return a list of nodes visible from the top view 
+    //from left to right in Binary Tree.
+    vector<int> topView(Node *root)
+    {
+        //Your code here
+        vector<int>ans;
+        queue<pair<Node*,int>>q;//queue of pair of nodes and vertical distance from center
+        map<int,int> mp; //key will be the horizontal distance, value = node->val
+        //Note: the map used here is an Ordered map becoz we will be constructing the ans 
+        //array from the nodes in the map becoz We want top view from leftmost node to righmost node
+        q.push({root,0});
+        while(!q.empty()){
+            Node* curr = q.front().first;
+            int currdist = q.front().second;
+            q.pop();
+            if(mp.find(currdist)==mp.end()){ //if no other node is present at that horizontal distance,
+            //then it will be included in the top view
+                // ans.push_back(curr->data);
+                mp[currdist] = curr->data;
+            }
+            if(curr->left){
+                q.push({curr->left,currdist-1});//we push a pair of left child and its hz distance from root
+            }
+            if(curr->right){
+                q.push({curr->right,currdist+1});//we push a pair of left child and its hz distance from root
+            }
+        }
+        for(auto it:mp)
+        {
+            ans.push_back(it.second);
+        }
+        return ans;
+    }
+
+};
