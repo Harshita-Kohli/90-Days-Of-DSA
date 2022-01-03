@@ -1,1 +1,71 @@
+You are given the head of a linked list with n nodes.
 
+For each node in the list, find the value of the next greater node. That is, for each node, find the value of the first node that is next to it and has a strictly larger value than it.
+
+Return an integer array answer where answer[i] is the value of the next greater node of the ith node (1-indexed). If the ith node does not have a next greater node, set answer[i] = 0.
+
+Example 1:
+Input: head = [2,1,5]
+Output: [5,5,0]
+Example 2:
+Input: head = [2,7,4,3,5]
+Output: [7,0,5,5,0]
+ 
+Constraints:
+
+The number of nodes in the list is n.
+1 <= n <= 10^4
+1 <= Node.val <= 10^9
+---------------------------------------------------------
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> nextLargerNodes(ListNode* head) {
+        //corner case
+        if(head==NULL) return vector<int> ();//return an empty array
+        vector<int>temp;//to store the linked list as a vector
+        while(head!=NULL){
+            temp.push_back(head->val);
+            head = head->next;
+        }
+        stack<int>st;
+        vector<int>ans;//size of ans is same as size of temp and we initialise it with 0
+       for(int i = temp.size()-1;i>=0;i--)
+       {
+           if(st.size()==0) ans.push_back(0);
+            else if(st.size()>0 && st.top()>temp[i])//we found a ngr
+            {
+                ans.push_back(st.top());
+            }
+            if(st.size()>0 && st.top()<=temp[i]){
+            while(!st.empty() && st.top() <= temp[i])
+                {//pop all the useless nodes, which cannot be ngr for any node on their left. Keep popping untill the top of stack is>currnode's value
+                    st.pop();
+                }
+                if(st.size()==0)
+                {
+                    ans.push_back(0);//no ngr found
+                }
+                if(st.size()>0) {
+                    ans.push_back(st.top());//the top of stack
+                }
+            }
+            st.push(temp[i]);//we push the current node into the stack as it can possibly be ngr for its left nodes   
+        }
+        reverse(ans.begin(),ans.end());
+        // for(int i = 0;i<ans.size();i++){
+        //     cout<<ans[i]<<"";
+        // }
+        
+        return ans;
+    }
+};
