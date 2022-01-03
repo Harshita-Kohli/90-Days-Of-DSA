@@ -1,1 +1,67 @@
+Given an array, rotate the array to the right by k steps, where k is non-negative.
 
+ 
+
+Example 1:
+
+Input: nums = [1,2,3,4,5,6,7], k = 3
+Output: [5,6,7,1,2,3,4]
+Explanation:
+rotate 1 steps to the right: [7,1,2,3,4,5,6]
+rotate 2 steps to the right: [6,7,1,2,3,4,5]
+rotate 3 steps to the right: [5,6,7,1,2,3,4]
+Example 2:
+
+Input: nums = [-1,-100,3,99], k = 2
+Output: [3,99,-1,-100]
+Explanation: 
+rotate 1 steps to the right: [99,-1,-100,3]
+rotate 2 steps to the right: [3,99,-1,-100]
+ 
+
+Constraints:
+
+1 <= nums.length <= 105
+-231 <= nums[i] <= 231 - 1
+0 <= k <= 105
+ 
+
+Follow up:
+
+Try to come up with as many solutions as you can. There are at least three different ways to solve this problem.
+Could you do it in-place with O(1) extra space?
+------------------------------------------------------------
+class Solution {
+public:
+//     //Approach1: Using O(n) extra space(becoz we are using temp[])
+    void rotate(vector<int>& nums, int k) {
+       
+        int n = nums.size();
+//         if(n==0 || k==0)
+//         {
+//             return; 
+//         }
+//         vector<int>temp(n);
+//         for(int i = 0;i<n;i++)
+//         {
+//             temp[i] = nums[i];//copy the nums array into temp array
+//         }
+//         for(int i = 0;i<n;i++)//now rotate the original array with the help of temp
+//         {
+//             nums[(i+k)%n] = temp[i];
+//         }
+//     }
+        
+//Approach2: Constant space(using reverse inbuilt-function)
+//corner case 1: for the case where k>n or k==n, we need to take mod of k with n. If k = 5, n = 2, k should be 1. If k = 2 and n=2, we need not rotate the array at all, so k should be 2%2 = 0
+    k = k%n;
+    //corner case 2:
+    if(n==0 || k==0)//if array is empty or we need not rotate at all, then simply do nothing and return
+    {
+        return;
+    }
+    reverse(nums.begin(),nums.end());//reverse the whole array
+    reverse(nums.begin(),nums.begin()+k);//then,reverse first k elements
+    reverse(nums.begin()+k,nums.end());//then,reverse the remaining n-k elements of the array
+    }
+};
