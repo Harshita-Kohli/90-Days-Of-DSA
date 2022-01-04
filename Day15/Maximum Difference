@@ -1,0 +1,131 @@
+Given array A[] of integers, the task is to complete the function findMaxDiff which finds the maximum absolute difference between nearest left and right smaller element of every element in array.If the element is the leftmost element, nearest smaller element on left side is considered as 0. Similarly if the element is the rightmost elements, smaller element on right side is considered as 0.
+
+Examples:
+
+Input : arr[] = {2, 1, 8}
+Output : 1
+Left smaller  LS[] {0, 0, 1}
+Right smaller RS[] {1, 0, 0}
+Maximum Diff of abs(LS[i] - RS[i]) = 1 
+
+Input  : arr[] = {2, 4, 8, 7, 7, 9, 3}
+Output : 4
+Left smaller   LS[] = {0, 2, 4, 4, 4, 7, 2}
+Right smaller  RS[] = {0, 3, 7, 3, 3, 3, 0}
+Maximum Diff of abs(LS[i] - RS[i]) = 7 - 3 = 4 
+
+Input : arr[] = {5, 1, 9, 2, 5, 1, 7}
+Output : 1
+Input:
+The first line of input contains an integer T denoting the no of test cases. Then T test cases follow .Each test case contains an integer N denoting the size of the array A. In the next line are N space separated values of the array A.
+
+Output:
+For each test case output will be in a new line denoting the the maximum absolute difference between nearest left and right smaller element of every element in array.
+
+Constraints:
+1<=T<=100
+1<=N<=100
+1<=A[ ]<=100
+
+Example(To be used only for expected output) :
+Input:
+2
+3
+2 1 8
+7
+2 4 8 7 7 9 3
+Output
+1
+4
+--------------------------------------------------------------------------------------
+// { Driver Code Starts
+#include<bits/stdc++.h>
+using namespace std;
+
+ // } Driver Code Ends
+
+class Solution{
+    public:
+    /*You are required to complete this method */
+    int findMaxDiff(int A[], int n)
+    {
+      //Your code here
+      //Here both NSR and NSL will be used
+      stack<int>st;
+      vector<int>nsl;
+      vector<int>nsr;
+      int maxim = INT_MIN;
+      //Computing nsl vector
+      for(int i = 0;i<n;i++)
+      {
+          if(st.size()==0)
+          {
+            nsl.push_back(0);//no NSL exists 
+          }
+          else if(!st.empty() && st.top()<A[i])//if NSL is found
+          {
+              nsl.push_back(st.top());//we push the NSL
+          }
+          else //if stack is non-empty but the top of stack is greater
+          {
+            while(!st.empty() && st.top()>=A[i])//keep popping all those elements that can never be NSL
+            {
+                st.pop();
+            }
+            if(st.size()==0) nsl.push_back(0);//as no NSL exists
+            else nsl.push_back(st.top());
+          }
+          st.push(A[i]);//we push the current element into stack
+      }
+      while(!st.empty()) st.pop();//we empty the stack
+      //computing nsr vector
+      for(int i = n-1;i>=0;i--)
+      {
+          if(st.size()==0)
+          {
+            nsr.push_back(0);//no NSR exists 
+          }
+          else if(!st.empty() && st.top()<A[i])//if NSR is found
+          {
+              nsr.push_back(st.top());//we push the NSL
+          }
+          else //if stack is non-empty but the top of stack is greater
+          {
+            while(!st.empty() && st.top()>=A[i])//keep popping all those elements that can never be NSL
+            {
+                st.pop();
+            }
+            if(st.size()==0) nsr.push_back(0);//as no NSL exists
+            else nsr.push_back(st.top());
+          }
+          st.push(A[i]);//we push the current element into stack
+      }
+      reverse(nsr.begin(),nsr.end());//we must reverse the nsr vector
+      for(int i = 0;i<n;i++)
+      {
+        maxim = max(maxim,abs(nsl[i]-nsr[i]));//computing maximum absolute difference 
+      }
+      return maxim;
+    }
+};
+
+// { Driver Code Starts.
+int main()
+{
+   int t;
+   cin>>t;
+   while(t--)
+   {
+   	int n;
+   	cin>>n;
+   	int a[n];
+   	for(int i=0;i<n;i++)
+   	cin>>a[i];
+   	Solution ob;
+   	cout<<ob.findMaxDiff(a,n)<<endl;
+   }
+    return 0;
+}
+
+
+  // } Driver Code Ends
