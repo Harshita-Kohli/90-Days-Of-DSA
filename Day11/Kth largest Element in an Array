@@ -1,0 +1,37 @@
+Given an integer array nums and an integer k, return the kth largest element in the array.
+
+Note that it is the kth largest element in the sorted order, not the kth distinct element.
+
+ 
+
+Example 1:
+
+Input: nums = [3,2,1,5,6,4], k = 2
+Output: 5
+Example 2:
+
+Input: nums = [3,2,3,1,2,4,5,5,6], k = 4
+Output: 4
+ 
+
+Constraints:
+
+1 <= k <= nums.length <= 104
+-104 <= nums[i] <= 104
+---------------------------------------
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        //as we want kth largest element, we will use a min heap becoz when size of min heap will be 2, the top of min heap will be storign the kth largest element.Using Min heap, we ensure that the larger elements will remain at the bottom of the heap, so we pop all the smaller elements when size>k, and we are left with the k largest elements at the bottom 
+        priority_queue<int,vector<int>, greater<int>> min;
+        int n = nums.size();
+        for(int i = 0;i<n;i++){
+            min.push(nums[i]);//keep pushing the array elements into minheap
+            if(min.size()>k)//when size of min heap>k, we pop the top of stakc because it is a useless element as it can never be the kth largest element
+            {
+                min.pop();
+            }
+        }
+        return min.top();
+    }
+};
