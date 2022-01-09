@@ -1,0 +1,59 @@
+Description
+Given n points on a 2D plane, find if there is such a line parallel to y-axis that reflect the given points.
+
+Example
+Example1
+
+Input: [[1,1],[-1,1]]
+Output: true
+Example2
+
+Input: [[1,1],[-1,-1]]
+Output: false
+Challenge
+Could you do better than O(n2)?
+
+Tags: Computational Geometry, Mathmatics
+Company: Google
+----------------------------------------------
+class Solution {
+public:
+    /**
+     * @param points: n points on a 2D plane
+     * @return: if there is such a line parallel to y-axis that reflect the given points
+     */
+    bool isReflected(vector<vector<int>> &points) {
+        // Write your code here
+        unordered_map<int,int>mp;
+        int xmax = INT_MIN;
+        int xmin = INT_MAX;
+        for(auto point:points)
+        {
+            int x = point[0];
+            int y = point[1];//we take the x and y coordinates of each point
+
+            xmax = max(xmax, x);//we wanna calculate the leftmost and the rightmost point given to us in the points[][] by using the x-coordinates
+            xmin = min(xmin, x);
+
+            int hash = x*100000000+y;
+            mp.insert({hash,1L});//push the hash into map
+        }
+        int mirror = xmax+xmin;//actually it is 2*mid = xmax+xmin
+        for(auto point:points)
+        {
+            int x = point[0];
+            int y = point[1];//we take the x and y coordinates of each point
+            
+            //Produce the image point now:
+            int ximg = mirror-x;
+            int yimg = y;
+            int imghash = ximg*100000000+yimg;
+
+            if(mp.find(imghash)==mp.end())//even if a single point does not have its mirror image
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+};
