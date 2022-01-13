@@ -1,0 +1,81 @@
+Given a root node reference of a BST and a key, delete the node with the given key in the BST. Return the root node reference (possibly updated) of the BST.
+
+Basically, the deletion can be divided into two stages:
+
+Search for a node to remove.
+If the node is found, delete the node.
+ 
+
+Example 1:
+
+
+Input: root = [5,3,6,2,4,null,7], key = 3
+Output: [5,4,6,2,null,null,7]
+Explanation: Given key to delete is 3. So we find the node with value 3 and delete it.
+One valid answer is [5,4,6,2,null,null,7], shown in the above BST.
+Please notice that another valid answer is [5,2,6,null,4,null,7] and it's also accepted.
+
+Example 2:
+
+Input: root = [5,3,6,2,4,null,7], key = 0
+Output: [5,3,6,2,4,null,7]
+Explanation: The tree does not contain a node with value = 0.
+Example 3:
+
+Input: root = [], key = 0
+Output: []
+ 
+
+Constraints:
+
+The number of nodes in the tree is in the range [0, 104].
+-105 <= Node.val <= 105
+Each node has a unique value.
+root is a valid binary search tree.
+-105 <= key <= 105
+ 
+
+Follow up: Could you solve it with time complexity O(height of tree)?
+---------------------------------------------------------------------
+class Solution {
+public:
+    TreeNode* deleteNode(TreeNode* root, int key) {
+        if(root==NULL) return NULL;//we can't delete any node from empty tree
+        if(key < root->val)
+        {
+           root->left = deleteNode(root->left,key);//we must go to the left subtree 
+        }
+        else if(key > root->val)
+        {
+            root->right = deleteNode(root->right,key);
+        }
+        else if(key==root->val)//if we find the target node to be deleted
+        {
+            if(!root->left&&!root->right)//it is a leaf node
+            {
+                return NULL;//as NULL will be the new root of that subtree
+            }
+            else if(!root->left)//the node to be deleted has no left child but has right child
+            {
+                return root->right;//as right child will be the new root node of tht subtree
+            }
+            else if(!root->right)//the node to be deleted has no right child but has left child
+            {
+                return root->left;//as left child will be the new root node of tht subtree
+            }
+            //if both children of the target node exist
+            else
+            {
+                TreeNode* temp = root->right;//we go to the right child of target node
+                while(temp->left)//we go to the extreme left child of temp as we want to find the inorder successor of temp
+                {
+                    temp = temp->left;
+                }
+                root->val = temp->val;//we make temp->val as the root->val of the subtree...so we removed the root indirectly
+                //now delete the temp node from the right subtree of target node
+                root->right = deleteNode(root->right,temp->val);
+            }
+        }
+        return root;
+    }
+};
