@@ -1,0 +1,69 @@
+Given an array nums of size n, return the majority element.
+
+The majority element is the element that appears more than ⌊n / 2⌋ times. You may assume that the majority element always exists in the array.
+
+ 
+
+Example 1:
+
+Input: nums = [3,2,3]
+Output: 3
+Example 2:
+
+Input: nums = [2,2,1,1,1,2,2]
+Output: 2
+ 
+
+Constraints:
+
+n == nums.length
+1 <= n <= 5 * 104
+-231 <= nums[i] <= 231 - 1
+ 
+
+Follow-up: Could you solve the problem in linear time and in O(1) space?
+-------------------------------------------------------------------------
+class Solution {
+public:
+    //O(n) time and O(n) worst case space, ie in the worst case, the given array will have all unique numbers so we will store all n numbers in the map
+    // int majorityElement(vector<int>& nums) {
+    //     unordered_map<int,int>mp;
+    //     int  n = nums.size();
+    //     int ans = 0;
+    //     for(auto it:nums)
+    //     {
+    //         mp[it]++;
+    //     }
+    //     for(auto it:mp)
+    //     {
+    //         if(it.second>n/2) ans = it.first;  
+    //     }
+    //     return ans; 
+    // }
+    
+    //O(n) Time and O(1) Space Complexity: Boyer Moore Majority Vote
+    int majorityElement(vector<int>& nums) {
+        int ans = 0;
+        int n = nums.size();
+        int count = 0;
+        int temp = -1;
+        //First Pass
+        for(int i = 0;i<nums.size();i++)
+        {
+            if(temp == nums[i]) count++;
+            else if(count == 0) temp = nums[i];
+            else //if another number occurs
+            {
+                count--;
+            }
+        }
+        //Second pass: To calculate the actual count of the majority element
+        count = 0;
+        for(int i = 0;i<n;i++)
+        {
+            if(nums[i]==temp) count++;
+        }
+        if(count>n/2) ans = temp;
+        return ans;
+    }
+};
