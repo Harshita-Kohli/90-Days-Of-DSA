@@ -1,0 +1,65 @@
+Given a binary tree and a sum, find all root-to-leaf paths where each path’s sum equals the given sum.
+
+For example:
+
+Given the below binary tree and sum = 22,
+
+              5
+             / \
+            4   8
+           /   / \
+          11  13  4
+         /  \    / \
+        7    2  5   1
+return
+
+[
+   [5,4,11,2],
+   [5,8,4,5]
+]
+------------------------------------------
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+
+// // int cursum = 0;
+void preorder(TreeNode* A,int B, vector<vector<int>>ans,vector<int>temp) //root->left->right
+{
+    //base case:
+    if(!A) return;
+    B -= A->val;
+    temp.push_back(A->val);//we keep pushing the node values 
+    if(!A->left && !A->right)//this is a leaf node
+    {
+        if(B==0) //if root to leaf path sum == B
+        {
+            ans.push_back(temp);
+        }
+        temp.pop_back();//we pop this leaf node and return to the parent node
+        return;
+    }
+    if(A->left)
+    {
+        preorder(A->left,B,ans,temp);
+    }
+    if(A->right)
+    {
+        preorder(A->right,B,ans,temp);
+    }
+    temp.pop_back();//we remove the last node's value as both its left and right subtrees have been processed
+    return;
+    
+}
+vector<vector<int> > Solution::pathSum(TreeNode* A, int B) {
+    vector<vector<int>>ans;
+    vector<int>temp;//will store node values of one root to leaf path at a time
+    if(!A) return ans;
+    preorder(A,B,ans,temp);
+  return ans;
+}
