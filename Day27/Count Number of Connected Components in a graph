@@ -37,6 +37,7 @@ int countComponent(vector<int> adj[],int n,int e)
 		if(!visited[i])//we 
 		{
 			//increment count of connected components because we have encountered a new connected component of the graph
+			count++;
 			q.push(i);
 			visited[i] = 1;
 			while(!q.empty())//perform bfs over the entire connected component
@@ -52,7 +53,6 @@ int countComponent(vector<int> adj[],int n,int e)
 					}
 				}
 			}
-			count++;
 		}
 	}
 	return count;
