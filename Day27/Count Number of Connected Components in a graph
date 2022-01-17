@@ -1,0 +1,75 @@
+Problem
+Given n, i.e. total number of nodes in an undirected graph numbered from 1 to n and an integer e, i.e. total number of edges in the graph. Calculate the total number of connected components in the graph. A connected component is a set of vertices in a graph that are linked to each other by paths.
+
+Input Format:
+
+First line of input line contains two integers n and e. Next e line will contain two integers u and v meaning that node u and node v are connected to each other in undirected fashion. 
+
+Output Format:
+
+For each input graph print an integer x denoting total number of connected components.
+
+Constraints:
+
+All the input values are well with in the integer range.
+Sample Input
+8 5
+1 2
+2 3
+2 4
+3 5
+6 7
+Sample Output
+3
+--------------------------------------------
+#include <bits/stdc++.h>
+using namespace std;
+// vector<int> adj[15];
+// vector<int>visited(15);
+int countComponent(vector<int> adj[],int n,int e)
+{
+	//we will do bfs:
+	int count = 0;
+	queue<int>q;
+	vector<int>visited(n+1,0);//initially all nodes are unvisited
+	for(int i = 1;i<=n;i++)
+	{
+		if(!visited[i])//we 
+		{
+			//increment count of connected components because we have encountered a new connected component of the graph
+			q.push(i);
+			visited[i] = 1;
+			while(!q.empty())//perform bfs over the entire connected component
+			{
+				int temp = q.front();
+				q.pop();
+				for(auto it:adj[temp]){
+					//traverse over the list of nbrs of temp
+					if(!visited[it])
+					{
+						q.push(it);//push all teh unvisited nbrs of temp into queue
+						visited[it] = 1;
+					}
+				}
+			}
+			count++;
+		}
+	}
+	return count;
+}
+int main()
+{
+	int n,e;
+	cin>>n>>e;
+	vector<int> adj[n+1];//adjacency list
+	for(int i = 1;i<=e;i++)//for each edge:
+	{
+		int u,v;
+		cin>>u>>v;
+		adj[u].push_back(v);
+		adj[v].push_back(u);
+	}
+	int ans = countComponent(adj,n,e);
+	cout<<ans<<endl;
+	return 0;
+}
