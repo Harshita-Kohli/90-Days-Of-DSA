@@ -1,0 +1,72 @@
+Given an integer array of size n, find all elements that appear more than ⌊ n/3 ⌋ times.
+
+ 
+
+Example 1:
+
+Input: nums = [3,2,3]
+Output: [3]
+Example 2:
+
+Input: nums = [1]
+Output: [1]
+Example 3:
+
+Input: nums = [1,2]
+Output: [1,2]
+ 
+
+Constraints:
+
+1 <= nums.length <= 5 * 104
+-109 <= nums[i] <= 109
+ 
+
+Follow up: Could you solve the problem in linear time and in O(1) space?
+--------------------------------------
+class Solution {
+public:
+    //O(n) Time Complexity and O(1) Space Complexity(Boyer Moore)
+    vector<int> majorityElement(vector<int>& nums) {
+        int x = -1;
+        int y = -1;
+        int n = nums.size();
+        int xcount = 0;
+        int ycount = 0;
+        //First pass to know the candidates that can be majority elements
+        for(int i = 0;i<n;i++)
+        {
+            if(nums[i]==x) xcount++;
+            else if(nums[i]==y) ycount++;
+            
+            else if(!xcount)
+            {
+                x = nums[i];
+                xcount = 1;
+            }
+            else if(!ycount)
+            {
+                y = nums[i];
+                ycount = 1;
+            }
+            else 
+            {
+                xcount--;
+                 ycount--; //becuase a triplet can be formed
+            }
+        }
+        //second pass:
+        //reset count of x and y to 0 again
+        xcount = 0;
+        ycount = 0;
+        for(int i = 0;i<n;i++)
+        {
+            if(nums[i]==x) xcount++;
+                 else if(nums[i]==y) ycount++;
+        }
+        vector<int>temp;
+        if(xcount>n/3) temp.push_back(x);//as it is a majority element
+        if(ycount>n/3) temp.push_back(y);//as it is a majority element
+        return temp;
+    }
+};
