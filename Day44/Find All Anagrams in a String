@@ -1,0 +1,47 @@
+class Solution {
+public:
+    vector<int> findAnagrams(string s, string p) {
+        //Fixed Sliding Window Problem:
+        int k = p.length();//fixed window size
+        unordered_map<char,int>mp;
+        vector<int>ans;
+        for(int i = 0;i<p.length();i++)//iterate over the given pattern:
+        {
+            mp[p[i]]++;
+        }
+        int uniq = mp.size();//no of unique charcters inside the pattern
+        
+        int i = 0;
+        int j = 0;
+        while(j<s.length())//iterate over the given string:
+        {
+            if(mp.find(s[j])!=mp.end())
+                {
+                    mp[s[j]]--;
+                    if(mp[s[j]]==0)//if s[i]'s frequency in this window is same as that in pattern, it means, we have one found one charcter that contributes to the anagram
+                    {
+                        uniq--;//as we have reduced the no. of unique characters still left to be matched
+                    }
+                }
+            if(j-i+1<k)
+            {
+                j++;
+            }
+            else if(j-i+1==k)//window size hit
+            {
+                //Step1: compute final answer
+                 if(uniq==0) ans.push_back(i);//because i is the starting index of the anagram occurence
+                //step2: remove answer contributed by i
+                if(mp.find(s[i])!=mp.end())
+                {
+                    mp[s[i]]++;
+                    if(mp[s[i]]==1) uniq++;
+                }
+                //step3: slide window forward maintaining its size
+                i++;
+                j++;
+            }
+        }
+        return ans;
+    }
+};
