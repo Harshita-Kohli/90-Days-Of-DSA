@@ -1,0 +1,32 @@
+https://leetcode.com/problems/all-divisions-with-the-highest-score-of-a-binary-array/
+class Solution {
+public:
+    vector<int> maxScoreIndices(vector<int>& nums) {
+        int n = nums.size();
+        unordered_map<int,vector<int>>mp;
+        int sum = 0;
+        int maxSum = INT_MIN;
+        for(int i = 0;i<n;i++)
+        {
+            if(nums[i]==1) sum++;
+        }
+        mp[sum].push_back(0);// the sum when partition is at i = 0 is stored in the map
+        maxSum = max(maxSum,sum);
+        for(int i = 1;i<=n;i++)
+        {
+            if(nums[i-1]==1)//right part lost a 1, so sum--
+            {
+                sum--;
+            }
+            else if(nums[i-1]==0)//the left part gained a 0, so sum++
+                sum++;
+            mp[sum].push_back(i);
+            maxSum = max(maxSum,sum);
+        }
+        //    vector<int>ans;
+        // for(auto it:mp[maxSum]){
+        //     ans.push_back()
+        // }
+        return mp[maxSum];
+        }
+};
