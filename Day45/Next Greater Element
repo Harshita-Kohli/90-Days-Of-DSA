@@ -1,0 +1,29 @@
+class Solution {
+  public:
+    vector<long long> nextLargerElement(vector<long long> arr, int n){
+        // Your code here
+        stack<long long> st;
+        vector<long long> ans(n,-1);
+        for(int i = n-1;i>=0;i--){
+            if(st.size()==0){
+                ans[i] = -1;//as there is no NGR for arr[i] element
+            }
+            else if(st.size()!=0 && st.top()>arr[i]){//found an NGR
+                ans[i] = st.top();
+            }
+            else if(st.size()!=0 && st.top()<=arr[i]){
+                while(!st.empty() && st.top()<=arr[i]){
+                    st.pop();//keep popping all the useless elements that cannot be ngr in future as well
+                }
+                if(st.empty()){
+                    ans[i] = -1;//no ngr for arr[i] exists
+                }
+                else{
+                    ans[i] = st.top();//the top of the stack is the ngr
+                }
+            }
+            st.push(arr[i]);//we push the current element into stack as it can be a ngr in future
+        }
+        return ans;
+    }
+    };
