@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int sumOfBeauties(vector<int>& nums) { 
+        int n = nums.size();
+        int sum = 0;
+        vector<int>rightMin(n,0);
+        rightMin[n-1] = nums[n-1];//for the rightmost element, the minimum on its right will be itself
+        for(int i = n-2;i>=0;i--)
+        {
+            rightMin[i] = min(rightMin[i+1],nums[i]);
+        }
+        
+        int leftMax = nums[0];//let the leftmost element be the maximum initially
+        for(int i = 1 ;i<=n-2;i++)
+        {
+            //All the numbers which are greater than all left elements and smaller than all right elements will have beauty = 2. So nums[i] will have beauty=2, if is smaller than minimum element on right and greater than maximum element on left.
+            if(nums[i]>leftMax && nums[i]<rightMin[i+1])
+            {
+                sum+=2;//we add 2 in sum becoz nums[i] has beauty=2
+            }
+        //All numbers which are greater than immmediate left and less than immediate right will have beauty = 1
+
+            else if(nums[i]>nums[i-1] && nums[i]<nums[i+1])
+            {
+                sum+=1;//becoz nums[i] has beauty=1
+            }
+            leftMax = max(leftMax,nums[i]);//we must update leftMax for the next iteration by checking if nums[i] is lesser than leftMax
+        }
+        return sum;
+    }
+};
