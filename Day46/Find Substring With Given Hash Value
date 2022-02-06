@@ -1,0 +1,40 @@
+class Solution {
+public:
+    string subStrHash(string s, int power, int modulo, int k, int hashValue) {
+        int n = s.length();
+        long long int sum = 0;
+        long long int p = 1;
+        int res=n-k;   // store the result in this
+        for(int i = 0;i<k;i++)//we create the hash value for the rightmost window of size = k
+        {
+            sum+=((s[n-k+i]-'a'+1)*p);//here n-k+i denotes indexes of the rightmost window. initially, n-k+i will denote the start index of the rightmost window, then we keep incrementing i in the for loop to add the hashvalues of all window elements 
+// here, s[n-k+i]-'a' will give the diff between ascii code of that character and 'a'. eg if s[n-k+i]='d', then we want its value to be = 'd'-'a'+1 = 100-97+1 = 4
+            
+            if(i!=k-1)//we will modify the p only for all the i which are less than k-1. Eg if k = 2, we wnat to modify power for i = 0 only and not for i = 1 becuase that is the last element in that window
+            {
+               p = (p*power)%modulo; 
+            }
+        }
+        //now we start moving the window from right towards left, and we remove the answer contributed by rightmost element ie s[i] and add the answer given by new left element ie s[i-k] in it
+        for(int i = n-1;i>=k;i--){
+            //step1:remove answer given by s[i]
+            sum-=(s[i]-'a'+1)*(p%modulo);
+            sum = sum%modulo;//to avoid integer overflow, take modulus with modulus
+            //step2: multiply the left over string with power
+            sum = sum*(power%modulo);
+            //add the answer contributed by s[i-k]
+            sum+=(s[i-k]-'a'+1);
+            
+            // sum < 0 creates problem in modulus, so make it positive
+            while(sum%modulo<0){                              
+                sum=sum+modulo;
+            }
+            //step 3: check if sum calculated for this window is same as given hashvalue
+            if(sum%modulo==hashValue)
+            {
+                res=i-k;                                           // storing the starting window index because we have to return the first string from starting 
+            }
+        }
+    return s.substr(res,k);
+    }
+};
