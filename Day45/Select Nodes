@@ -1,0 +1,56 @@
+https://practice.geeksforgeeks.org/contest/interview-series-flipkart/problems/
+class Solution{
+  public:
+    void dfs(vector<int>adj[], vector<int>&select, int src, int parent){
+        for(auto &it:adj[src])//iterate over the adjacenct nodes of src
+        {
+            if(it!=parent)//we only iterate over those nodes which are not parent of src, because we will be stuck in an infinite loop as we are already coming from parent
+            {
+                dfs(adj,select,it,src);//we call dfs with it as source now and src as parent of it
+            }
+        }
+        bool flag = false;//to tell if node is leaf node, If it remains false after the for loop, it means we are on a leaf node
+        for(auto &it:adj[src])
+        {
+            if(it!=parent)//if src is not a leaf node, only then in its adjacency list, it will be having an adjacent node except parent
+            {
+                flag = true;//we are not on a leaf node 
+                if(select[it]==0)//because if we are not on a leaf node, and any child is not selected, then select the parent
+                {
+                    select[src] = 1;//as soon as we cover the source node,we break becuase we need not iterate iver the rest of its adjacency list
+                    break;
+                }
+                // else if(select[it]==1)
+            }
+        }
+        if(!flag)//if we are at leaf node, we select the parent
+        {
+            select[src] = 0;//because src is a leaf node
+        }
+    }
+    int countVertex(int N, vector<vector<int>>edges){
+        // code here
+        vector<int>adj[N+1];
+        for(int i = 0;i<edges.size();i++)
+        {
+            int u = edges[i][0];
+            int v = edges[i][1];
+            adj[u].push_back(v);
+            adj[v].push_back(u);
+        }
+        int count = 0;
+        vector<int>select(N+1,0);//initially all are unselected
+        // int select[N+1] = {0};
+        dfs(adj, select, 1,-1);//we pass the adjacency list, select array, 1 as root and -1a as its parent
+        for(int i = 0;i<N+1;i++){
+            if(select[i]==1) 
+            {
+                count++;//we increment the count as and when we find a selected node
+        
+            }
+        }
+        return count;
+        
+    }
+    
+};
