@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int minim = INT_MAX;
+        int profit = 0;
+        if(prices.size()<2) return 0;//as we need atleast 2 days to buy and sell on different days
+        for(int i = 0;i<prices.size();i++){
+            if(prices[i]<minim){ //if it is less than minim, we update minim
+                minim = prices[i];
+            }
+            else//if the cost is greater than minim, we check if selling on that day gives us better profit
+            {
+                if(prices[i]-minim>profit)
+                {
+                    profit = prices[i]-minim;
+                }
+            }
+        }
+        return profit;
+    }
+};
