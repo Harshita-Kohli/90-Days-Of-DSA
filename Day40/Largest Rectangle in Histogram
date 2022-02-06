@@ -1,0 +1,86 @@
+class Solution {
+public:
+    vector<int> NSL(vector<int> heights)
+    {
+       stack<int>st;
+        vector<int>nsl;
+        int pseudoindex = -1;//if no nsl, we will push -1 as nsl index
+        for(int i = 0;i<heights.size();i++)
+        {
+            if(st.size()==0)
+            {
+                nsl.push_back(pseudoindex);//no nsl for ith element
+            }
+            else if(st.size()>0 && heights[st.top()]<heights[i])//we found an nsl
+            {
+                nsl.push_back(st.top());//we push the index of nsl
+            }
+            else
+            {
+                while(st.size()>0 && heights[st.top()]>=heights[i])
+                {
+                    st.pop();//pop those indices which can never be nsl 
+                }
+                if(st.empty())
+                {
+                    nsl.push_back(pseudoindex);//no nsl for the 
+                }
+                else
+                {
+                    nsl.push_back(st.top());//we push the index of nsl
+                }
+            }
+            st.push(i);//push the current index into stack
+        }
+        return nsl;
+    }
+     vector<int> NSR(vector<int> heights)
+    {
+       stack<int>st2;
+        vector<int>nsr;
+         int n = heights.size();
+         // int pseudoindex = n;//if an element has no nsr, we will push n as nsr index
+        for(int i = n-1;i>=0;i--)//iterate form right to left
+        {
+            if(st2.size()==0)
+            {
+                nsr.push_back(n);//no nsr for ith element
+            }
+            else if(st2.size()>0 && heights[st2.top()]<heights[i])//we found an nsl
+            {
+                nsr.push_back(st2.top());//we push the index of nsl
+            }
+            else
+            {
+                while(!st2.empty() && heights[st2.top()]>=heights[i])
+                {
+                    st2.pop();//pop those indices which can never be nsl 
+                }
+                if(st2.empty())
+                {
+                    nsr.push_back(n);//no nsl for the 
+                }
+                else
+                {
+                    nsr.push_back(st2.top());//we push the index of nsl
+                }
+            }
+            st2.push(i);//push the current index into stack
+        }
+         reverse(nsr.begin(),nsr.end());
+        return nsr;
+    }
+    int largestRectangleArea(vector<int>& heights) {
+        int maxarea = INT_MIN;
+        int curarea = 0;
+        vector<int> nsl = NSL(heights);// returns the nsl array
+        vector<int> nsr = NSR(heights);//returns the nsl array
+        for(int i = 0;i<heights.size();i++)
+        {
+            // curarea = heights[i]*(nsr[i]-nsl[i]);
+            int width = nsr[i]-nsl[i]-1;
+            maxarea = max(maxarea, heights[i]*width);
+        }
+       return maxarea; 
+    }
+};
