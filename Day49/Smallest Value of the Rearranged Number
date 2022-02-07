@@ -1,0 +1,66 @@
+class Solution {
+public:
+    // #define long long ll;
+    long long smallestNumber(long long num) {
+        unordered_map<int,int> mp;
+        // vector<int>freq(n);
+        long long temp = abs(num);
+        // cout<<temp<<endl;
+        long long ans = 0;
+        while(temp)
+        {
+            int n = temp%10;
+            // freq[n]++;
+            mp[n]++;//frequency of each digit in nums
+            temp = temp/10;
+        }
+        if(num>=0)//positive numbers
+        {
+            //place smallest digit except 0 on leftmost place
+            for(int i = 1;i<=9;i++)
+            {
+                // cout<<"Inside smallest digit\n";
+                if(mp.find(i)!=mp.end())
+                {
+                    // cout<<"Inside if";
+                    ans = i;
+                    mp[i]--;
+                    if(mp[i]==0) mp.erase(i);
+                    break;
+                }
+            }
+            for(int i = 0;i<=9;i++)
+            {
+                while(mp.find(i)!=mp.end())
+                {
+                    ans = ans*10+i;
+                    mp[i]--;
+                    if(mp[i]==0) mp.erase(i);
+                }
+            }
+        }
+        else if(num<0)//negative numbers
+        {
+            //place largest digit on leftmost place
+            for(int i = 9;i>=1;i--)
+            {
+                if(mp.find(i)!=mp.end()){
+                    ans = i;
+                    mp[i]--;
+                    if(mp[i]==0) mp.erase(i);
+                    break;
+                }
+            }
+            for(int i = 9;i>=0;i--){
+                while(mp.find(i)!=mp.end())
+                {
+                    ans = ans*10+i;
+                    mp[i]--;
+                    if(mp[i]==0) mp.erase(i);
+                }
+            }
+            ans = -ans;
+        }
+        return ans;
+    }
+};
