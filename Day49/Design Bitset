@@ -1,0 +1,60 @@
+class Bitset {
+public:
+    string bitset,bitunset;
+    int countof;
+    int total;
+    Bitset(int size) {
+        for(int i = 0;i<size;i++)
+        {
+           bitset.push_back('0');//this is '00000'
+           bitunset.push_back('1');//this is '11111' ie complement of bitset
+        }
+    total = size;//initialise the total size of the bitset initially
+    countof = 0;//initialise
+    }
+    
+    void fix(int idx) {
+        if(bitset[idx]=='0') countof++;//as we encountered a zero
+        bitset[idx] = '1';
+        bitunset[idx] = '0';
+    }
+    
+    void unfix(int idx) {
+        if(bitset[idx]=='1') countof--;//as we encountered a '1'
+        bitset[idx] = '0';
+        bitunset[idx] = '1';
+    }
+    
+    void flip() {
+        swap(bitset,bitunset);
+        countof = total-countof;//because now the number of 1's and 0's has changed
+    }
+    
+    bool all() {
+        return countof==total; //true if all bits were '1', otherwise false
+    }
+    
+    bool one() {
+        return countof>0; //true if atleast single '1'
+    }
+    
+    int count() {
+        return countof;//this holds the number of set bits ie no of '1'
+    }
+    
+    string toString() {
+        return bitset;
+    }
+};
+
+/**
+ * Your Bitset object will be instantiated and called as such:
+ * Bitset* obj = new Bitset(size);
+ * obj->fix(idx);
+ * obj->unfix(idx);
+ * obj->flip();
+ * bool param_4 = obj->all();
+ * bool param_5 = obj->one();
+ * int param_6 = obj->count();
+ * string param_7 = obj->toString();
+ */
