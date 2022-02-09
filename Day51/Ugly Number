@@ -1,0 +1,23 @@
+class Solution {
+public:
+    bool isUgly(int n) {
+        if(n==0) return false;//because, 0's prime factors are not limited to 2,3,5. Instead, 0 has infinite prime factors, so it is not ugly, return false
+        
+        //now take lcm of the given number with 2,3,5
+        //if after taking the lcm, the number becomes 1, then it is an ugly number:
+        while(n%2==0)
+        {
+            n = n/2;//keep dividing n by 2 till n is divisible by 2
+        }
+         while(n%3==0)
+        {
+            n = n/3;//keep dividing n by 3 till n is divisible by 2
+        }
+         while(n%5==0)
+        {
+            n = n/5;//keep dividing n by 5 till n is divisible by 2
+        }
+        //check if n has become 1:
+        return n==1;
+    }
+};
