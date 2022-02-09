@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int findPairs(vector<int>& nums, int k) {
+        int n = nums.size();
+        unordered_map<int,int>mp;
+        for(int i = 0;i<n;i++){
+          mp[nums[i]]++;//frequency of each number is stored in the map
+        }
+        //iterate over the array again and count all k-diff pairs
+        int count = 0;
+        if(k>0)
+        {
+           for(auto it:mp)
+           {
+               if(mp.find(it.first-k)!=mp.end())
+                {
+                    count++;
+                }
+           }
+         } 
+        else if(k==0)
+        {
+            for(auto it:mp){
+               if(it.second>1)
+                {
+                    count++;
+                } 
+            }
+        }
+        return count;
+    }
+};
