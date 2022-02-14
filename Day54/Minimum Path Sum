@@ -1,0 +1,30 @@
+class Solution {
+public:
+    int t[201][201];//2d dp array as here the parameters that change are row and column of the cell
+    
+    int topDown(vector<vector<int>>& grid,int m, int n)
+    {
+        if(m==0 && n==0) return t[m][n] = grid[0][0];
+        if(m==0)//0th row 
+        {
+            return t[0][n] = grid[m][n]+topDown(grid,m,n-1);//we add the left cell's number into grid[m][n]
+        }
+        if(n==0)//0th column 
+        {
+            return t[m][0] = grid[m][n]+topDown(grid,m-1,n);//we add the upper cell's number into grid[m][n]
+        }
+        if(t[m][n]!=-1){
+            return t[m][n];
+        }
+        //t[m][n] will be grid[m][n]+ the minimum of the left cell and the upper cell:
+        t[m][n] = grid[m][n]+min(topDown(grid,m-1,n),topDown(grid,m,n-1));
+        return t[m][n];
+    }
+    int minPathSum(vector<vector<int>>& grid) {
+        int m = grid.size();
+        int n = grid[0].size();
+        // int t[m+1][n+1];
+        memset(t,-1,sizeof(t));
+        return topDown(grid,m-1,n-1);
+    }
+};
