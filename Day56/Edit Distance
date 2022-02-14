@@ -1,0 +1,134 @@
+Given two strings s and t. Return the minimum number of operations required to convert s to t.
+The possible operations are permitted:
+
+Insert a character at any position of the string.
+Remove any character from the string.
+Replace any character from the string with any other character.
+ 
+
+Example 1:
+
+Input: 
+s = "geek", t = "gesek"
+Output: 1
+Explanation: One operation is required 
+inserting 's' between two 'e's of str1.
+Example 2:
+
+Input : 
+s = "gfg", t = "gfg"
+Output: 
+0
+Explanation: Both strings are same.
+ 
+
+Your Task:
+You don't need to read or print anything. Your task is to complete the function editDistance() which takes strings s and t as input parameters and returns the minimum number of operation to convert the string s to string t. 
+
+
+Expected Time Complexity: O(|s|*|t|)
+Expected Space Complexity: O(|s|*|t|)
+
+
+Constraints:
+1 ≤ Length of both strings ≤ 100
+Both the strings are in lowercase.
+------------------------------
+// { Driver Code Starts
+#include <bits/stdc++.h>
+using namespace std;
+
+ // } Driver Code Ends
+class Solution {
+  public:
+//Topdown approach:
+//   int dp[101][101];
+//   int topDown(string s, string t, int n, int m){
+//       //base case:
+//     //   if(n==0 && m==0)//both strings are empty
+//     //   {
+//     //       return dp[n][m] = 0;//no operation needed
+//     //   }
+//       if(n==0){//if str1 is empty, we need to make m insertions to make it str2
+//           return dp[n][m] = m;
+//       }
+//       else if(m==0){//if str2 is empty, we need to make n deletions in str1
+//           return dp[n][m] = n;
+//       }
+//       //use of memoisation:
+//       if(dp[n][m]!=-1){
+//           return dp[n][m];
+//       }
+//       //recursive calls
+//       if(s[n-1]==t[m-1]){
+//           dp[n][m] = topDown(s,t,n-1,m-1);
+//       }
+//       else
+//       {
+//           int op1 = topDown(s,t,n-1,m);//deletion in str1
+//           int op2 = topDown(s,t,n,m-1);//insertion in str1
+//           int op3 = topDown(s,t,n-1,m-1);//replacement in str1          
+//           dp[n][m] = 1+min({op1, op2, op3});
+//       }
+//       return dp[n][m];
+//   }
+//     int editDistance(string s, string t) {
+//         // Code here
+//         memset(dp,-1,sizeof(dp));
+//         int n = s.length();
+//         int m = t.length();
+//         return topDown(s,t,n,m);
+//     }
+
+//Bottom up approach:
+int editDistance(string s, string t) {
+    int n = s.length();
+    int m = t.length();
+    int dp[n+1][m+1];//2d dp array
+    //initialisation:
+    dp[0][0] = 0;//no operations needed if both strings are empty
+    for(int i = 0;i<n+1;i++)
+    {
+        for(int j = 0;j<m+1;j++)
+        {
+            if(i==0){
+                dp[i][j] = j;//j insertions needed in str1
+            }
+            if(j==0){
+                dp[i][j] = i;//i deletions needed in str1
+            }
+        }
+    }
+    //filling the rest of the dp matrix
+    for(int i =1;i<n+1;i++){
+        for(int j = 1;j<m+1;j++){
+            if(s[i-1]==t[j-1]){
+                dp[i][j] = dp[i-1][j-1];
+            }
+            else //if s[i-1]!=t[j-1]
+            {
+                int op1 = dp[i-1][j];
+                int op2 = dp[i][j-1];
+                int op3 = dp[i-1][j-1];
+                dp[i][j] = 1+min({op1, op2, op3});
+            }
+        }
+    }
+    return dp[n][m];//the last cell will store the final answer
+}
+};
+
+// { Driver Code Starts.
+int main() {
+    int T;
+    cin >> T;
+    while (T--) {
+        string s, t;
+        cin >> s >> t;
+        Solution ob;
+        int ans = ob.editDistance(s, t);
+        cout << ans << "\n";
+    }
+    return 0;
+}
+  // } Driver Code Ends
