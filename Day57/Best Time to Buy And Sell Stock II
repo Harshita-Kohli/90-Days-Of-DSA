@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int n = prices.size();
+        int valley = prices[0];
+        int peak = prices[0];
+        int ans = 0;
+        for(int i = 0;i<n-1;i++)
+        {
+            //We want to find valley before peak
+            //find a valley
+            while(i<n-1 && prices[i]>=prices[i+1]){
+                i++;//skip the peaks to reach a valley
+            }
+            valley = prices[i];
+            while(i<n-1 && prices[i]<prices[i+1]){
+                i++;//skip the peaks to reach a valley
+            }
+            peak = prices[i];
+            ans+=peak-valley;//for every peak-valley pair, we add the diff peak-valley 
+        }
+        return ans;
+    }
+};
