@@ -1,0 +1,82 @@
+Given 3 strings A, B and C, the task is to find the longest common sub-sequence in all three given sequences.
+
+Example 1:
+
+Input:
+A = "geeks", B = "geeksfor", 
+C = "geeksforgeeks"
+Output: 5
+Explanation: "geeks"is the longest common
+subsequence with length 5.
+â€‹Example 2:
+
+Input: 
+A = "abcd", B = "efgh", C = "ijkl"
+Output: 0
+Explanation: There's no common subsequence
+in all the strings.
+
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function LCSof3() which takes the strings A, B, C and their lengths n1, n2, n3 as input and returns the length of the longest common subsequence in all the 3 strings.
+
+
+Expected Time Complexity: O(n1*n2*n3).
+Expected Auxiliary Space: O(n1*n2*n3).
+
+
+Constraints:
+1<=n1, n2, n3<=20
+------------------------------------------------------
+// { Driver Code Starts
+#include<bits/stdc++.h>
+using namespace std;
+
+int LCSof3 (string A, string B, string C, int n1, int n2, int n3);
+int main()
+{
+    int t; cin >> t;
+    while (t--)
+    {
+        int n1, n2, n3; cin >> n1 >> n2 >> n3;
+        string A, B, C; cin >> A >> B >> C;
+        cout << LCSof3 (A, B, C, n1, n2, n3) << endl;
+    }
+}
+//}
+
+
+int LCSof3 (string A, string B, string C, int n1, int n2, int n3)
+{
+    // your code here
+    //Bottom up approach:
+    int t[n1+1][n2+1][n3+1];//3d dp array because here 3 parameters(n1, n2, n3) are varying 
+    //initialisation:
+    for(int i = 0;i<n1+1;i++){
+        for(int j = 0;j<n2+1;j++){
+            for(int k = 0;k<n3+1;k++)
+            {
+                if(i==0 || j==0 || k==0)
+                {
+                    t[i][j][k] = 0;//because there cannot be anything common in the triplet if any one string is empty
+                }
+            }
+        }
+    }
+    //filling the rest of the matrix
+    for(int i = 1;i<n1+1;i++){
+        for(int j = 1;j<n2+1;j++){
+            for(int k = 1;k<n3+1;k++)
+            {
+                if(A[i-1]==B[j-1] && A[i-1]==C[k-1])//all the corresponding characters are common, we have a choice as to whether include it or not
+                {
+                    t[i][j][k] = 1+t[i-1][j-1][k-1];//because there cannot be anything common in the triplet if any one string is empty
+                }
+                else//we must decide which gives maximum ans for longest common subsequence
+                {
+                    t[i][j][k] = max({t[i-1][j][k], t[i][j-1][k], t[i][j][k-1]});
+                }
+            }
+        }
+    }
+    return t[n1][n2][n3];//this will store the final length of the longest common subsequence
+}
