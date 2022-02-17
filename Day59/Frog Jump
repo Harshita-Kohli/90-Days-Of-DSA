@@ -1,0 +1,54 @@
+A frog is crossing a river. The river is divided into some number of units, and at each unit, there may or may not exist a stone. The frog can jump on a stone, but it must not jump into the water.
+
+Given a list of stones' positions (in units) in sorted ascending order, determine if the frog can cross the river by landing on the last stone. Initially, the frog is on the first stone and assumes the first jump must be 1 unit.
+
+If the frog's last jump was k units, its next jump must be either k - 1, k, or k + 1 units. The frog can only jump in the forward direction.
+
+Example 1:
+Input: stones = [0,1,3,5,6,8,12,17]
+Output: true
+Explanation: The frog can jump to the last stone by jumping 1 unit to the 2nd stone, then 2 units to the 3rd stone, then 2 units to the 4th stone, then 3 units to the 6th stone, 4 units to the 7th stone, and 5 units to the 8th stone.
+
+Example 2:
+Input: stones = [0,1,2,3,4,8,9,11]
+Output: false
+Explanation: There is no way to jump to the last stone as the gap between the 5th and 6th stone is too large.
+ 
+Constraints:
+0 <= stones[i] <= 231 - 1
+stones[0] == 0
+stones is sorted in a strictly increasing order.
+-------------------------------------------------------------------------------------
+class Solution {
+public:
+   // Confirm this once: Worst Case Time Complexity: O(n^2)  Worst Case Space Complexity:O(n^2) (Acc to me)
+    bool canCross(vector<int>& stones) {
+        //Bottom Up DP 
+        int n = stones.size();
+        // vector<pair<int,unordered_set>> t[n+1];
+        //using map instead of vector of pair so as to find stones[i]+step O(1) time
+        unordered_map<int,unordered_set<int>>mp;//key will be the stone's position and the value will be all the steps that we can take to reach this position
+        for(auto it:stones)
+        {
+            mp[it] = {};//initially, we assign empty sets to each stone position
+        }
+        //initialisation:
+        mp[0].insert(0);//frog needs not jump to reach stone at position 0 ie the first stone becoz he is already at that stone
+        
+        for(int i = 0;i<n;i++){
+            //iterate over the unordered set at mp[stones[i]]
+            for(auto it:mp[stones[i]]){
+                for(int step = it-1;step<=it+1;step++){
+                    if(step>0 && mp.find(stones[i]+step)!=mp.end())
+                    {
+                        mp[stones[i]+step].insert(step);//becuse frog must take 'step' no. of jumps to reach that stone
+                    }
+                }
+            }
+        }
+        if(mp[stones[n-1]].size()>0){
+            return true;
+        }
+        return false;
+    }
+};
