@@ -1,0 +1,29 @@
+class Solution {
+public:
+    ListNode* mergeNodes(ListNode* head) {
+        ListNode* temp = head;
+        ListNode* prev = head;
+        // cout<<prev->val<<" ";
+        int sum = 0;
+        while(temp!=NULL){
+            sum+=temp->val;
+            if(temp->val==0 && sum!=0){
+                ListNode* n = new ListNode(sum);
+                sum = 0;//reset
+                prev->next = n;
+                n->next = temp;
+                prev = temp;
+                // cout<<prev->val<<" ";
+            }
+            temp = temp->next;
+        }
+        head = head->next;
+        temp = head;//new head
+        while(temp!=NULL && temp->next!=NULL){
+            temp->next = temp->next->next;
+            // cout<<temp->val<<" ";
+            temp = temp->next;
+        }
+        return head;
+    }
+};
