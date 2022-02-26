@@ -1,0 +1,20 @@
+int Solution::majorityElement(const vector<int> &A) {
+    //boyer moore voting algorithm:
+    int n = A.size();
+    int count = 1;
+    int curr = A[0];
+    for(int i = 1;i<n;i++){
+        if(A[i]==curr){
+            count++;
+        }
+        else
+        {
+            count--;
+        }
+        if(count==0){
+            curr = A[i];//update curr with A[i] and reset count to 1
+            count = 1;
+        }
+    }
+    return curr;
+}
