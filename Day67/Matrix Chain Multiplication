@@ -1,0 +1,62 @@
+// { Driver Code Starts
+// Initial Template for C++
+
+#include <bits/stdc++.h>
+using namespace std;
+
+ // } Driver Code Ends
+// User function Template for C++
+class Solution{
+public:
+int t[101][101];//2d dp array
+int topDown(int N, int arr[],int i, int j){
+    int temp_ans = 0;
+    int min_ans = INT_MAX;
+    //step2: base case: think of the smallest invalid input
+    if(i>=j){
+        //i==j means one element in the array
+        //i>j means 0 elements in the array
+        //in both cases we can't perform mcm
+        return 0;
+    }
+    if(t[i][j]!=-1){
+        return t[i][j];
+    }
+    //step3: find valid values for k
+    for(int k = i;k<=j-1;k++){
+        //adding the answer of left subproblem(i,k) with right subproblem(k+1,j)
+        //and also adding the extra cost to multiply the 2 subproblems
+        //Step4: find temp ans for all values of k and then compute final_ans from temp answers
+        temp_ans = topDown(N,arr,i,k)+topDown(N,arr,k+1,j)+(arr[i-1]*arr[k]*arr[j]);
+        min_ans = min(min_ans,temp_ans);
+    }
+    return t[i][j] = min_ans;
+}
+    int matrixMultiplication(int N, int arr[])
+    {
+        // code here
+        memset(t,-1,sizeof(t));
+        //step1: find valid values for i and j
+        int i = 1;
+        int j = N-1;
+        return topDown(N,arr,i,j);
+    }
+};
+
+// { Driver Code Starts.
+
+int main(){
+    int t;
+    cin>>t;
+    while(t--){
+        int N;
+        cin>>N;
+        int arr[N];
+        for(int i = 0;i < N;i++)
+            cin>>arr[i];
+        
+        Solution ob;
+        cout<<ob.matrixMultiplication(N, arr)<<endl;
+    }
+    return 0;
+}  // } Driver Code Ends
