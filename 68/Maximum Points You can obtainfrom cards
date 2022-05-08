@@ -1,0 +1,34 @@
+class Solution {
+public:
+    int maxScore(vector<int>& cardPoints, int k) {
+        int n = cardPoints.size();
+        int i = 0;
+        int j = 0;
+        int totsum = 0;
+        int cursum = 0;
+        int minim = INT_MAX;
+         for(int t = 0;t<n;t++){
+                totsum+=cardPoints[t];
+            }
+        if(n==k)//if we can pick all the cards, then ans is simply the sum of all cardpoints
+        {
+            return totsum;
+        }
+        //otherwise we use the sliding window approach
+        //We want to find a subarray of size = n-k that has minimum sum, and then we remove it from the array. Thus, we are left with k cards having with maximum sum
+        int win = n-k;
+        while(j<n){
+            cursum+=cardPoints[j];
+            if(j-i+1<win){
+                j++;//expand the window to reach the target size
+            }
+            else if(j-i+1==win){//target window size achieved
+               minim = min(minim,cursum);
+                cursum-=cardPoints[i];
+                i++;
+                j++;//slide the window forward
+            }
+        }
+        return totsum-minim;//we return the sum of the k sized window
+    }
+};
