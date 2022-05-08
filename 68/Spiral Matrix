@@ -1,0 +1,54 @@
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        vector<int>ans;
+        int m = matrix.size();//no of rows
+        int n = matrix[0].size();//no of columns
+        int left = 0;
+        int right = n-1;
+        int top = 0;
+        int bottom = m-1;
+        char dir = 'e';
+        while(left<=right && top<=bottom)
+        {
+            if(dir == 'e'){
+                for(int i = left;i<=right;i++)
+                //move in rightward direction
+                {
+                    ans.push_back(matrix[top][i]);
+                }
+                //here i==right, so we need to move in downward direction in the same column and also update top to top+1
+                top = top+1;
+                dir = 's'; 
+            }
+            else if(dir=='s'){
+                for(int i = top;i<=bottom;i++)
+                {
+                    ans.push_back(matrix[i][right]);
+                }
+                //here i==bottom, so we must move in left direction in the same row also update right to right-1
+                right = right-1;
+                dir = 'w';
+            }
+            else if(dir=='w'){
+                for(int i = right;i>=left;i--)
+                {
+                    ans.push_back(matrix[bottom][i]);
+                }
+                ////here i==left, so we must move upwards in the same column also update the bottom to bottom-1
+                bottom = bottom-1;;
+                dir = 'n';
+            }
+            else if(dir=='n'){
+                for(int i = bottom;i>=top;i--)
+                {
+                    ans.push_back(matrix[i][left]);
+                }
+                //now i==top, so we must move in rightward direction again, and also update left to left+1
+               left = left+1;
+                dir = 'e';
+            }
+        }
+        return ans;
+    }
+};
