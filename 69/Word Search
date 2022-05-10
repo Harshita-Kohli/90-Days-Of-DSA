@@ -1,0 +1,38 @@
+class Solution {
+public:
+    bool exist(vector<vector<char>>& board, string word) {
+        int m = board.size();//rows
+        int n = board[0].size();//columns
+        for(int i = 0;i<m;i++){
+            for(int j = 0;j<n;j++){
+                if(board[i][j]==word[0] && dfs(board,i,j,word,0))//if we found the first character of the word and also the remaining part of the word is exactly found in the board, return true
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    //Now actual code begins where we need to find dfs
+    bool dfs(vector<vector<char>>& board, int i, int j, string word, int count){
+        //count is the index of the character of the word
+        if(count==word.size())
+        {
+            return true;
+        }
+        
+        //if i or j exceed the matrix boundaries or if jo board pe character hai wo word ke character ke saath match nahi kar raha 
+        if(i<0 || i>=board.size() || j<0 || j>=board[0].size() || board[i][j]!=word[count]){ 
+            return false;
+        }
+        char temp = board[i][j];//we save board[i][j] in temp
+        board[i][j] = ' ';//then we mark it visited by making it empty
+        //see the notes for more explanation
+        bool found = (dfs(board,i+1,j,word,count+1) 
+                || dfs(board,i-1,j,word,count+1) 
+                || dfs(board,i,j+1,word,count+1)
+                || dfs(board,i,j-1,word,count+1));
+        board[i][j] = temp;//restore the board[i][j] back to its original value
+        return found;
+    }
+};
