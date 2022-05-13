@@ -1,0 +1,31 @@
+class Solution {
+public:
+    vector<string>ans;
+    void helper(int n, int open, int close, string temp){
+        //base case:
+        if(close==n){ //jaise hi no. of closed brackets==n, tabhi hum is combination ko ans me store kar lenge aur return kardenge
+            ans.push_back(temp);
+            return;
+        }
+        //Dekho hume 'n' pairs banane hain joki balanced/well-formed hone chahiye
+    //STEP 1: N pairs banane k liye ye condition check honi chahiye:
+        if(open<n){ //agar open brackets n se kam hain, to hum opne bracket daldenge ans me
+            //DOUBT: why does it give wrong o/p if i do open++ and temp+='(' instead of helper(n,open+1,close, temp)??
+             // open++;
+            // temp+='(';
+            helper(n,open+1,close,temp+'('); //ab baaki ke combinations generate karo 
+        }
+    //STEP 2: Balanced pairs banane k liye yeh condition bhi chekc honi chahiye:
+        if(open>close)//agar open brackets > closed brackets to hum closed bracket daldenge 
+        {
+            // close++;
+            // temp+=')';
+            helper(n,open,close+1,temp+')');//ab baaki ke combinations generate karo 
+        }
+    }
+    vector<string> generateParenthesis(int n) {
+        // vector<string>ans;
+        helper(n,0,0,"");//we pass n, open = 0, close = 0, temp = ""
+        return ans;
+    }
+};
