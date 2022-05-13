@@ -1,0 +1,55 @@
+// class Solution {
+// public:
+//     string longestCommonPrefix(vector<string>& strs) {
+//         string ans = "";
+//         int n = strs.size();
+//         if(n==0)
+//         {
+//             return "";//return empty string
+//         }
+//         sort(strs.begin(),strs.end());
+//         for(int i = 0;i<n;i++)
+//         {
+//             cout<<strs[i]<<" ";
+//         }
+//         string s1 = strs[0];//first word of the vector
+//         string s2 = strs[n-1];//last word of the vector
+//         //we will find common prefix between the first and the last word because the alphabetically largst will be present at the last of the vector and the alphabetically smallest will be present at first word of vector. If 1st and last word have common prefix, then there exists a common prefix among all of the words of the vector
+//         for(int i = 0;i<s1.length();i++)//we iterate till the length of the first word because it will be help us get the longest common prefix becasue it will be of the smallest length among the other words that start from the same character. EG: {flow, flower, flowerette}
+//         {
+//             if(s1[i] == s2[i])
+//             {
+//                 ans = ans+s1[i];//we concatenate ans and the characters of first word which are common with last word so as to form the longest common prefix string
+//             }
+//             else
+//             {
+//                 break;//even of a single char does not match , we break then and there
+//             }
+//         }
+//         return ans;
+//     }
+// };
+
+
+class Solution {
+public:
+    string longestCommonPrefix(vector<string>& strs) {
+        int n = strs.size();
+        sort(strs.begin(),strs.end());
+        string ans = "";//will store the longest common prefix
+        
+        // if(strs.size()==0) return strs;
+        string str1 = strs[0];//first string of the strs array
+        string str2 = strs[n-1];//last string of the strs array
+        //now check how many characters of the first and the last word match
+        for(int i = 0;i<strs[0].length();i++){ //iterate only upto length of first string
+            if(str1[i] == str2[i]){ //if the characters are common, we add it to ans string
+                ans+=str1[i];
+            }
+            else {
+                break;//if there is any mismatch of characters of str1 and str2, break then and there
+            }
+        }
+        return ans;
+    }
+};
