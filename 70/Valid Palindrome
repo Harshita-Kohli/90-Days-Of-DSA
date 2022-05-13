@@ -1,0 +1,30 @@
+class Solution {
+public:
+    bool helper(string s, int i, int j){
+        while(i<=j){ //phri se wahi karo..keep inc i and dec j agar ith aur jth characters match karte hain
+            if(s[i]==s[j]){
+                i++;
+                j--;
+            }
+            else{ //otherwise, agar ek bhi character mismatch kare to return false kyunki is string me 2 characters remove karne padenge isko palindrome banane k liye
+                return false;
+            }
+        }
+        return true;
+    }
+    bool validPalindrome(string s) {
+       int n = s.length();
+        int i = 0;
+        int j = n-1;//2 pointers are used
+        while(i<=j){
+            if(s[i]==s[j]){ //agar ith and jth charcaters match kar rahe hain tab tak i++, j-- kardo
+                i++;
+                j--;
+            }
+            else { //agar ith aur jth charcaters nahi match kar rahe, to check karo ki agar string me se ith character ya jth charcater hata diya jaye to string palindrome banega ya nahi. Agar dono cases me se ek bhi true return karta hai, to hum bhi true return kardenge
+                return helper(s,i+1,j) || helper(s,i,j-1);
+            }
+        }
+        return true;
+    }
+};
