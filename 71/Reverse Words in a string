@@ -1,0 +1,74 @@
+// class Solution {
+// public:
+//O(n) time and space approach
+//     string reverseWords(string s) {
+//         int n = s.length();
+//         stack<string>st;
+//         string temp = "";
+//         string ans = "";
+//         int i = 0;
+//         while(i<n)
+//         {
+//             while(i<n && s[i]==' '){ //saari spaces ko ignore kari jao
+//                 i++;
+//             }
+//             //here i is at non-space wala character
+//             while(i<n && s[i]!=' '){ //jab tak space nahi aati tab tak characters ko string me dalte jao, aur jaise hi space a jaye to is word ko stack me push kardo
+//                temp+=s[i]; 
+//                 i++;
+//             }
+//             //here i is at space wala character
+//             if(temp.size()>0)
+//             {
+//                 st.push(temp);
+//                 temp.clear();//temp ko clear kardo next word ke liye
+//             }
+            
+//         }
+//         //ab hum stack se pop karte hue ans string construct karenge
+//         ans+=st.top();
+//         st.pop();
+//         while(!st.empty()){
+//             ans+=' ';//pehle space daalo
+//             ans+=st.top(); //phir word concatenate kardo
+//             st.pop();
+//         }
+//         return ans;
+//     }
+// };
+
+//O(n) time and O(1) space approach:
+class Solution {
+public:
+    string reverseWords(string s) {
+        int n = s.length();
+        int i = 0;
+        string result = "";
+        // int j = n-1;
+        while(i<n){
+            while(i<n && s[i]==' '){//ignore spaces
+                i++;
+            }
+            if(i>=n) break;
+            int j = i;
+            // int end = j;
+            while(j<n && s[j]!=' ') { 
+                // temp+=s[i];
+                j++;
+            }
+            //here j is at space wala character
+            string temp = s.substr(i,j-i);
+            // cout<<temp<<" "<<endl;
+            //here i is at the space wala character
+            if(result.length()==0){
+                result = temp;
+            }
+            else{
+                result = temp+" "+result;//we append the temp at the start of the result string...this way we are reversing it
+            }
+            i = j+1;
+           // temp = "";//empty the temp string for the next string
+        }
+        return result;
+        }
+    };
