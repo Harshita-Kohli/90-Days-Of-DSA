@@ -1,0 +1,58 @@
+// { Driver Code Starts
+#include<bits/stdc++.h>
+using namespace std;
+
+
+ // } Driver Code Ends
+class Solution
+{
+    public:
+    //Function to find the smallest window in the string s consisting
+    //of all the characters of string p.
+    string smallestWindow (string s, string p)
+    {
+        // Your code here
+        int k = p.length();
+        int n = s.length();
+        string ans = "";
+        map<char,int>mp;
+        for(auto it:p){
+            mp[it]++;
+        }
+        int count = mp.size();
+        int i = 0;
+        int j = 0;
+        int len = INT_MAX;
+        int start = 0;
+        while(j<n){
+            // if(mp.find(s[j])!=mp.end()){
+                mp[s[j]]--;
+                if(mp[s[j]]==0){
+                    count--;
+                }
+            // }
+            
+            if(count==0){ //if a valid substring is found
+    //Try to find a smaller substring by shrinking the window till the useless characters are removed from it:
+               while(count==0){
+                   if(len>j-i+1){ //if we found a smaller window having all the characters of p
+                       len = min(len,j-i+1);
+                       start = i;//save start index of the substring
+                   }
+                //   if(mp.find(s[i])!=mp.end()){
+                       mp[s[i]]++;
+                      if(mp[s[i]]>0){
+                           count++;
+                      }
+                //   }
+                   i++; //keep shrinking the window
+               }
+            }
+            j++;//expand the window forward now
+        }
+        if(len!=INT_MAX){
+            return s.substr(start,len);
+        }
+        return "-1";
+    }
+};
