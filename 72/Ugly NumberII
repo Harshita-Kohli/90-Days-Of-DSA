@@ -1,0 +1,38 @@
+class Solution {
+public:
+    int nthUglyNumber(int n) {
+        int t[n+1]; //dp array jisme dp[i] denotes the ith ugly number
+        t[0] = 0;//the 0th ugly number is 0
+        t[1] = 1;//the first ugly number is 1(assumption)
+        int p2 = 1;  
+        int p3 = 1;
+        int p5 = 1;
+        int minim = INT_MAX;
+        for(int i = 2;i<n+1;i++){
+            //ab 2,3 aur 5 ke wo saare multiples compute karo jinke prime factors sirf 2, 3 ya 5 hain
+            //1,2,3,4,5,6,8,9,10,12,15,16,18,20.............
+            
+            int mult2 = 2*t[p2]; //2 ko multiply sirf ugly numbers se hi karenge taa
+            int mult3 = 3*t[p3];//3 ko bhi sirf ugly numbers se hi multiply karenge, nahi to mult3 nonugly a jayega
+            int mult5 = 5*t[p5];//5 ko bhi sirf ugly numbers se hi multiply karenge
+            //ab in tino me se minimum lele kyunki wo hi current ugly number hoga
+            minim = min(min(mult2,mult3),mult5);
+            
+            t[i] = minim;//t[i] me minim daaldo kyunki ith ugly number minim hi hai
+            
+            //ab pointers ko age move karo 
+            //agar mult2 ugly number tha to p2++ karo taaki next mult2 nikaalne ke liye phirse p2 ki same value na use ho jaye...next multiple nikalne k liye hum p2 ko age kar denge
+            if(minim==mult2){
+                p2++;
+            }
+            //same p3 aur p5 ke liye bhi
+            if(minim==mult3){
+                p3++;
+            }
+            if(minim==mult5){
+                p5++;
+            }
+        }
+        return t[n];//t[n] me humara nth ugly number stored hai
+    }
+};
