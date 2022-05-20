@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int kthSmallest(vector<vector<int>>& matrix, int k) {
+       priority_queue<int>maxh;//maxheap lenge kyunki hum chahte hain ki k smallest numbers heap ke bottom me reh jayen
+        int n = matrix.size();
+        int m = matrix[0].size();
+        for(int i = 0;i<n;i++){
+            for(int j = 0;j<m;j++){
+                maxh.push(matrix[i][j]);
+            }
+        }
+        while(maxh.size()>k){
+            maxh.pop();
+        }
+        return maxh.top(); //this will be the kth smallest element
+    }
+};
