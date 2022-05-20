@@ -1,0 +1,30 @@
+class Solution {
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        vector<int> ans;
+        priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>>minh;//we use minheap coz we wnat k most freq elements in the bottom of the heap
+        int n = nums.size();
+        unordered_map<int,int>mp;
+        for(int i = 0;i<n;i++){
+            mp[nums[i]]++;
+        }
+        
+        for(auto it:mp)
+        {
+            if(minh.size()<k){ //jab tak heap ka size k se kam hai tab tak to hum araam se push kari jayenge
+                minh.push({it.second,it.first});//push the pair of {freq,element} into minheap
+            }
+            else{ //agar heap ka size >= k, tab hum check karenge ki jo incoming pair hai uski freq minh ke top se zyada hai ya nahi...agar zyada hai to minh.top() useless hai, so pop it and incoing pair ko push karwa do
+                if(it.second>minh.top().first){
+                    minh.pop();
+                    minh.push({it.second,it.first});
+                }
+            }   
+        }
+        while(!minh.empty()){
+           ans.push_back(minh.top().second);
+            minh.pop();
+        }
+        return ans;
+    }
+};
