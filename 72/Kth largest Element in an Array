@@ -1,0 +1,20 @@
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        priority_queue<int,vector<int>,greater<int>>minh; //we take a minheap becoz we want to have kth largest element on the top...all the k largest elements will be at the bottom of the heap
+        int ans = 0;
+        for(int i = 0;i<nums.size();i++){
+            minh.push(nums[i]);
+            if(minh.size()>k){
+                 minh.pop();
+            }
+        }
+        while(minh.size()!=0){
+           if(minh.size()==k){
+               ans = minh.top();
+           } 
+            minh.pop();
+        }
+        return ans;
+    }
+};
